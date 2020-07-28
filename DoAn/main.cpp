@@ -129,7 +129,7 @@ void main()
 {
 	DanhSachSV L;
 	//	cout << " Chuong trinh Quan Ly Sinh Vien * Phong Dao Tao * DHKHTN "<<endl;
-	if (!TaoNgauNhien(L, 10, 10)) // dung mang dong thi 10000 sv hoac tham chi nhieu hon han van thuong ok
+	if (!TaoNgauNhien(L, 7, 7)) // dung mang dong thi 10000 sv hoac tham chi nhieu hon han van thuong ok
 		return;
 	//int second = Xuat(L, L.n + 1);
 	//ThemSV(L);
