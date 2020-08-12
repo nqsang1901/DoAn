@@ -1,7 +1,9 @@
-#include <iostream>
+﻿#include <iostream>
 #include <cstring>
 #include <time.h>
 #include <conio.h>
+#include<fstream>
+#include<string>
 using namespace std;
 #define MAX 12345 // so SV toi da du kien cua truong
 
@@ -87,9 +89,9 @@ void TaoNgauNhien(SINHVIEN& X) {
 	char Phuong[11][10] = {"1","2","3","4","5","6"};
 	char Quan[10][15] = {"Tan Binh", "1","2","Go Vap","Binh Thanh","5"};
 	X.DiaChi[3] = So;
-	strcat_s(X.DiaChi,Duong[rand() % 7]); strcat_s(X.DiaChi, ", Phuong ");
-	strcat_s(X.DiaChi, Phuong[rand() % 6]); strcat_s(X.DiaChi, ", Quan ");
-	strcat_s(X.DiaChi, Quan[rand() % 6]); 	strcat_s(X.DiaChi, ", TP. HCM");
+	strcat_s(X.DiaChi,Duong[rand() % 7]); strcat_s(X.DiaChi, " Phuong ");
+	strcat_s(X.DiaChi, Phuong[rand() % 6]); strcat_s(X.DiaChi, " Quan ");
+	strcat_s(X.DiaChi, Quan[rand() % 6]); 	strcat_s(X.DiaChi, " TP.HCM");
 
 	_itoa_s((100000000 + rand() % (999999999 - 100000000 + 1)), X.SoDT, 10);
 }
@@ -114,7 +116,7 @@ void NhapMonHoc(MonHoc& MH)
 	cout << "Nhap so lan hoc: "; cin >> MH.SoLanHoc;
 	for (int i = 0; i < MH.SoLanHoc; i++)
 	{
-		NhapDiemMonHoc(MH.DiemMH[14]);
+		NhapDiemMonHoc(MH.DiemMH[i]);
 	}
 }
 void NhapSinhVien(SINHVIEN& X)
@@ -131,18 +133,77 @@ void NhapSinhVien(SINHVIEN& X)
 	cout << "Nhap so mon da hoc: "; cin >> X.SoMonDaHoc;
 	for (int i = 0; i < X.SoMonDaHoc; i++)
 	{
-		NhapMonHoc(X.Mon[50]);
+		NhapMonHoc(X.Mon[i]);
 	}
 }
 void Xuat(SINHVIEN& X) {
-	cout << X.TenSV << endl;
-	cout <<"- "<< X.MaSV << endl;
-	cout <<"- "<< X.GioiTinh << endl;
-	cout << "- " << X.NgaySinh.ngay << "/" << X.NgaySinh.thang << "/" << X.NgaySinh.nam << endl;
-	cout << "- " << X.SoCC << endl;
-	cout << "- " << X.DiaChi << endl;
-	cout << "- " << X.SoDT << endl;
+	cout <<"Ho ten: "<< X.TenSV << endl;
+	cout <<"- "<<"MSSV: "<< X.MaSV << endl;
+	cout <<"- "<< "Gioi tinh: "<<X.GioiTinh << endl;
+	cout << "- " << "Ngay sinh: "<<X.NgaySinh.ngay << "/" << X.NgaySinh.thang << "/" << X.NgaySinh.nam << endl;
+	cout << "- " << "So CC: "<< X.SoCC << endl;
+	cout << "- " <<"Dia chi: " << X.DiaChi << endl;
+	cout << "- " << "SDT: "<< X.SoDT << endl;
+	cout << endl;
 }
+void ghiThongTin1SinhVien(ofstream& fileout, SINHVIEN sv)
+{
+	fileout << sv.TenSV << ", ";
+	fileout << sv.MaSV << ", ";
+	fileout << sv.GioiTinh << ", ";
+	fileout << sv.NgaySinh.ngay << "/" << sv.NgaySinh.thang << "/" << sv.NgaySinh.nam << ", ";
+	fileout << sv.SoCC<<",";
+	fileout << sv.DiaChi<<",";
+	fileout << sv.SoDT;
+}
+void ghiThongTinDanhSachSinhVien(SLList &L)
+{
+	ofstream fileout;
+	fileout.open("DanhSachSV.TXT", ios::out);
+	for (NODE* k = L.pHead; k != NULL; k = k->pNext)
+	{
+		ghiThongTin1SinhVien(fileout, k->data.key);
+		fileout << endl;
+	}
+	fileout.close();
+}
+void ghiThongTinDanhSachSinhVien(DanhSachSV& aList)
+{
+	ofstream fileout;
+	fileout.open("DanhSachSV.TXT", ios::out);
+	for (int i = 0; i < aList.n; i++)
+	{
+		ghiThongTin1SinhVien(fileout, aList.sv[i].key);
+		fileout << endl;
+	}
+	fileout.close();
+}
+void Doc_Ngay_Thang_Nam(ifstream& filein, Ngay& ngay)
+{
+	filein >> ngay.ngay;
+	filein.seekg(1, 1); // dịch sang phải 1 byte để bỏ qua kí tự '/'
+	filein >> ngay.thang;
+	filein.seekg(1, 1); // dịch sang phải 1 byte để bỏ qua kí tự '/'
+	filein >> ngay.nam;
+}
+//void ghiThongTin1SinhVien(ifstream& filein, SINHVIEN& sv)
+//{
+//	// đọc họ tên sinh viên
+//	cin.getline(filein, sv.TenSV, ','); // đọc đến dấu ',' thì dừng
+//	filein.seekg(1, 1); // tại vị trí hiện tại dịch sang phải 1 byte để bỏ khoảng trắng ' '
+//	// đọc mã sinh viên	
+//	getline(filein, sv.masv, ','); // đọc đến dấu ',' thì dừng
+//	filein.seekg(1, 1); // tại vị trí hiện tại dịch sang phải 1 byte để bỏ khoảng trắng ' '
+//	// đọc thông tin ngày tháng năm sinh
+//	Doc_Ngay_Thang_Nam(filein, sv.ngaysinh);
+//	filein.seekg(2, 1); // tại vị trí hiện tại dịch sang phải 2 byte để bỏ dấu phẩy và khoảng trắng ' '
+//	// đọc điểm trung bình
+//	filein >> sv.dtb;
+//
+//	// tạo biến tạm để đọc cái kí tự xuống dòng ở cuối dòng
+//	string temp;
+//	getline(filein, temp);
+//}
 bool makeRandomList(DanhSachSV& aList, int num, int maxsize = MAX) {
 	if (num < MAX) aList.size = maxsize;
 	else aList.size = num + 100;
@@ -157,6 +218,11 @@ bool makeRandomList(DanhSachSV& aList, int num, int maxsize = MAX) {
 		aList.sv[i].xyz = rand() % 100;
 	}	
 	return true;
+}
+void deleteList(DanhSachSV& aList) {
+	for (int i = 0; i < aList.n; i++) {
+		delete aList.sv;
+	}
 }
 NODE* searchNode(const SLList L, char MaSV[9]) {
 	NODE* current = L.pHead;
@@ -214,13 +280,13 @@ NODE* insertNode(SLList& L, Element X, int Pos) {
 	if (q == L.pTail) L.pTail = newNode;
 	return newNode;
 }
-//NODE* addNode(SLList& L) {
-//	cout << "Enter value of node: ";
-//	Element X; cin >> X.key;
-//	cout << "Enter position to insert (-1 for append): ";
-//	int pos; cin >> pos;
-//	return insertNode(L, X, pos);
-//}
+NODE* addNode(SLList& L,SINHVIEN sv) {
+	TaoNgauNhien(sv);
+	Element X = { sv,99 };
+	cout << "Enter position to insert (-1 for append): ";
+	int pos; cin >> pos;
+	return insertNode(L, X, pos);
+}
 void deleteFirstNode(SLList& L) {
 	if (L.pHead == L.pTail) { //There is only one node
 		delete L.pHead;
@@ -269,21 +335,25 @@ void deleteList(SLList& L) {
 	while (L.pHead)
 		deleteFirstNode(L);
 }
+
 int makeRandomList(SLList& L) {
-	if (L.pHead != NULL)  deleteList(L);
+	if (L.pHead == NULL)  
+		deleteList(L);
 	cout << "Enter number of elements: ";
 	int Num;  cin >> Num;
 	L.pHead = L.pTail = NULL;
 	for (int i = 0; i < Num; i++) {
 		int random = (int)rand() % 2020;
-		Element X = { random, 1.0 * random / 99 };
+		SINHVIEN sv;
+		TaoNgauNhien(sv);
+		Element X = { sv, 1.0 * random / 99 };
 		if (!prependNode(L, X)) return i;
 	}
 }
 void printList(const SLList L) {
 	NODE* current = L.pHead;
 	cout << "------------------------------------"
-		<< endl << " Elements of List: [ ";
+		<< endl << " Elements of List: [ "<<endl;
 	while (current != NULL) {
 		Xuat(current->data.key);
 		current = current->pNext;
@@ -322,16 +392,18 @@ bool MoRongDS(DanhSachSV& aList, int Inc = 101) {
 //	aList.sv[aList.n++].key = X;
 //	return true;
 //}
+
 void Menu()
 {
 	DanhSachSV DArr;
+	SLList L;
 	bool ArrFlag;
 	cout << "Do you want to create dynamic arrays(0. yes, 1. no): ";
 	cin >> ArrFlag;
 	if (ArrFlag==0)
 		makeRandomList(DArr,3,3); // makeRandom Dynamic Array with N elements
-	//else 
-	//	makeRandomList(SLList); // makeRandom Singly Linked List with N elements
+	else 
+		makeRandomList(L); // makeRandom Singly Linked List with N elements
 	while (true) {
 		cout << "0. Quit" << endl
 			<< "1. Read List from File" << endl
@@ -346,16 +418,23 @@ void Menu()
 		cout << endl << "Enter operation number: ";
 		int choice; cin >> choice;
 		switch (choice) {
-			/*	case 0: if (ArrFlag) deleteList(DArr);
-					  else deleteList(SLList);
-					return 0;*/
-		case 3: if (ArrFlag==0)
-			Xuat(DArr, DArr.n + 1);
-			//else printList(SLList);
+		case 0: if (ArrFlag) deleteList(DArr);
+				else deleteList(L);
+			return;
+		case 2:
+			if (ArrFlag == 0)
+				ghiThongTinDanhSachSinhVien(DArr);
+			else
+				ghiThongTinDanhSachSinhVien(L);
 			break;
-		case 5: if (ArrFlag == 0)
-		
-			//else printList(SLList);
+		case 3: 
+			if (ArrFlag==0)
+				Xuat(DArr, DArr.n + 1);
+			else printList(L);
+			break;
+		case 5: 
+			SINHVIEN sv;
+			addNode(L, sv);
 			break;
 		default: cout << "You need to enter a number between 0 & 9";
 		}
@@ -365,5 +444,4 @@ void Menu()
 void main()
 {
 	Menu();
-	system("pause");
 }
