@@ -204,9 +204,11 @@ void Doc_Ngay_Thang_Nam(ifstream& filein, Ngay& ngay)
 //	string temp;
 //	getline(filein, temp);
 //}
-bool makeRandomList(DanhSachSV& aList, int num, int maxsize = MAX) {
-	if (num < MAX) aList.size = maxsize;
-	else aList.size = num + 100;
+bool makeRandomList(DanhSachSV& aList) {
+	cout << "Enter number of elements: ";
+	int num;  cin >> num;
+	/*if (num < MAX) aList.size = maxsize;*/
+	aList.size = num + 100;
 	aList.sv = new Element[MAX];
 	//aList.sv[1].key = new SINHVIEN[aList.size];
 	if (aList.sv == NULL) return false;
@@ -220,9 +222,8 @@ bool makeRandomList(DanhSachSV& aList, int num, int maxsize = MAX) {
 	return true;
 }
 void deleteList(DanhSachSV& aList) {
-	for (int i = 0; i < aList.n; i++) {
-		delete aList.sv;
-	}
+		delete []aList.sv;
+		aList.n = 0;
 }
 NODE* searchNode(const SLList L, char MaSV[9]) {
 	NODE* current = L.pHead;
@@ -309,28 +310,42 @@ void deletetNodeAtPosition(SLList& L, int Pos) {
 	if (L.pTail == p)  L.pTail = q;
 	delete p;
 }
-//void deleteNodeByKey(SLList& L, int Key) {
-//	if (L.pHead == NULL) return;
-//	if (L.pHead->data.key == Key) return deleteFirstNode(L);
-//	NODE* q = L.pHead, * p = q->pNext;
-//	while (p != NULL && p->data.key != Key) {
-//		q = p;
-//		p = p->pNext;   // <q> is always the previous of <p>
-//	}
-//	if (p == NULL) return; // not found
-//	q->pNext = p->pNext;
-//	if (L.pTail == p)  L.pTail = q;
-//	delete p;
-//}
-//void deleteNode(SLList& L) {
-//	cout << "Enter position to delete or -1 to delete by key): ";
-//	int pos; cin >> pos;
-//	if (pos != -1)
-//		return deletetNodeAtPosition(L, pos);
-//	cout << "Enter the key of node: ";
-//	int key;  cin >> key;
-//	deleteNodeByKey(L, key); // delete 1st node found 
-//}
+void deletetNodeAtPosition(DanhSachSV& aList) 
+{
+	cout << "Enter position to delete or -1 to delete by MaSV): ";
+	int pos; cin >> pos;
+	if (pos > aList.n - 1 || pos < 0)
+	{
+		cout << "Pos invalid location" << endl;
+		return;
+	}
+	aList.n--;
+	for (int i = pos; i < aList.n; i++) {
+		aList.sv[i] = aList.sv[i + 1];
+	}
+}
+void deleteNodeByMaSV(SLList& L, char MaSV[9]) {
+	if (L.pHead == NULL) return;
+	if (strcmp(L.pHead->data.key.MaSV,MaSV)==0) return deleteFirstNode(L);
+	NODE* q = L.pHead, * p = q->pNext;
+	while (p != NULL && strcmp(p->data.key.MaSV ,MaSV)!=0) {
+		q = p;
+		p = p->pNext;   // <q> is always the previous of <p>
+	}
+	if (p == NULL) return; // not found
+	q->pNext = p->pNext;
+	if (L.pTail == p)  L.pTail = q;
+	delete p;
+}
+void deleteNode(SLList& L) {
+	cout << "Enter position to delete or -1 to delete by MaSV): ";
+	int pos; cin >> pos;
+	if (pos != -1)
+		return deletetNodeAtPosition(L, pos);
+	cout << "Enter the MaSV of node: ";
+	char MaSV[9];  cin >> MaSV;
+	deleteNodeByMaSV(L, MaSV); // delete 1st node found 
+}
 void deleteList(SLList& L) {
 	while (L.pHead)
 		deleteFirstNode(L);
@@ -353,15 +368,19 @@ int makeRandomList(SLList& L) {
 void printList(const SLList L) {
 	NODE* current = L.pHead;
 	cout << "------------------------------------"
-		<< endl << " Elements of List: [ "<<endl;
+		<< endl << " Elements of List: "<<endl;
+	int i = 0;
 	while (current != NULL) {
+		cout << "\t#" << i + 1 << ". ";
 		Xuat(current->data.key);
 		current = current->pNext;
+		i++;
 	}
-	cout << "]" << endl << "........................." << endl;
+	cout << endl << "........................." << endl;
 }
 int Xuat(DanhSachSV aList, int num = 100) {
 	cout << "Danh sach SV: " << endl;
+	if (aList.n <= 0) cout << "Empty" << endl;
 	for (int i = 0; i < aList.n; i++) {
 		cout << "\t#" << i + 1 << ". ";
 		Xuat(aList.sv[i].key);
@@ -384,12 +403,19 @@ bool MoRongDS(DanhSachSV& aList, int Inc = 101) {
 	}
 	return true;
 }
-void Add2DynamicArr(DanhSachSV& aList, SINHVIEN sv)
+bool Add2DynamicArr(DanhSachSV& aList, SINHVIEN sv)
 {
+	cout << "Enter position to insert: ";
+	int pos; cin >> pos;
+	if (pos<0 || pos>aList.n)
+	{
+		cout << "Pos invalid location" << endl;
+		return false;
+	}
 	Element item = { sv,rand() % 100 };
 	if (aList.size == aList.n) {
 		for (int i = 101; i >= -9; i -= 10) {
-			if (i == -9)return;
+			if (i == -9)return false;
 			Element* temp = (Element*)realloc(aList.sv, aList.size);
 			if (temp) {
 				aList.sv = temp;
@@ -398,8 +424,11 @@ void Add2DynamicArr(DanhSachSV& aList, SINHVIEN sv)
 			}	
 		}
 	}
-	aList.n++;
-	aList.sv[aList.n - 1] = item;
+	for (int i = ++aList.n; i > pos; i--) {
+		aList.sv[i] = aList.sv[i - 1];
+	}
+	aList.sv[pos] = item;
+	return true;
 }
 //bool ThemSV(DanhSachSV& aList, SINHVIEN X = { "20192000", "Nguyen Van Cu", true, { 1, 1, 1999 },
 //		"079099001002", "", "", "", "Cong nghe Thong tin", 0 }) {
@@ -436,6 +465,31 @@ void SortListByMaSV(SLList& L)
 		}
 	}
 }
+void SLList2Array(SLList& L, DanhSachSV& aList)
+{
+	if (L.pHead == NULL) return;
+	int num = 0;
+	for (NODE* p = L.pHead; p; p = p->pNext)
+		num++;
+	aList.sv = new Element[MAX];
+	aList.n = 0;
+	aList.size = 100+num;
+	for (NODE* p = L.pHead; p; p = p->pNext)
+	{
+		aList.sv[aList.n++] = p->data;
+	}
+}
+int Array2SLList(DanhSachSV& aList,SLList& L )
+{
+	if (aList.n == 0)return aList.n;
+	L.pHead = L.pTail = NULL;
+	for (int i = 0; i < aList.n; i++)
+	{
+		if(appendNode(L, aList.sv[i])==NULL)
+			return i+1;
+	}
+	return aList.n;
+}
 void Menu()
 {
 	DanhSachSV DArr;
@@ -444,7 +498,7 @@ void Menu()
 	cout << "Do you want to create dynamic arrays(0. yes, 1. no): ";
 	cin >> ArrFlag;
 	if (ArrFlag==0)
-		makeRandomList(DArr,2,3); // makeRandom Dynamic Array with N elements
+		makeRandomList(DArr); // makeRandom Dynamic Array with N elements
 	else 
 		makeRandomList(L); // makeRandom Singly Linked List with N elements
 	while (true) {
@@ -461,9 +515,9 @@ void Menu()
 		cout << endl << "Enter operation number: ";
 		int choice; cin >> choice;
 		switch (choice) {
-		case 0: if (ArrFlag) deleteList(DArr);
+		case 0: if (ArrFlag==0) deleteList(DArr);
 				else deleteList(L);
-			return;
+			break;
 		case 1:
 		case 2:
 			if (ArrFlag == 0)
@@ -481,11 +535,19 @@ void Menu()
 		case 5: 
 			SINHVIEN sv;
 			TaoNgauNhien(sv);
-			if (ArrFlag == 0)
-				Add2DynamicArr(DArr, sv);
-			else addNode(L, sv);
+			if (ArrFlag == 0) {
+				if (Add2DynamicArr(DArr, sv)) cout << "Success" << endl;
+				else cout << "Failure" << endl;
+			}
+			else {
+				if (addNode(L, sv)) cout << "Success" << endl;
+				else cout << "Failure"<<endl;
+			}
 			break;
 		case 6:
+			if (ArrFlag == 0)
+				deletetNodeAtPosition(DArr);
+			else deleteNode(L);
 			break;
 		case 7:
 			if (ArrFlag == 0)
@@ -493,10 +555,19 @@ void Menu()
 			else SortListByMaSV(L);
 			break;
 		case 8:
+			if (ArrFlag == 1)
+				SLList2Array(L, DArr);
+			else
+				cout << "The list is empty" << endl;
 			break;
 		case 9:
+			if (ArrFlag == 0) 
+				Array2SLList(DArr, L);
+			else 
+				cout << "The Array is empty" << endl;
 			break;
 		default: cout << "You need to enter a number between 0 & 9";
+			break;
 		}
 	}
 

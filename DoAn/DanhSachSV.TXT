@@ -1,3 +1,3 @@
-Huynh Xuan Quit, 121313, Nu, 19/7/2004, 100004630,132 Tran Hung Dao Phuong 3 Quan 1 TP.HCM,100000262
-Tran Phi Buoi, 132478, Nu, 11/9/2004, 100009948,159 Huynh Thuc Khang Phuong 3 Quan 2 TP.HCM,100015431
-Tran Phi Bac, 100335, Nu, 21/8/1991, 100007596,187 Huynh Thuc Khang Phuong 6 Quan Tan Binh TP.HCM,100031541
+Vo Phi Dai, 121589, Nu, 22/12/1990, 100015369,60 Bui Thi Xuan Phuong 2 Quan Go Vap TP.HCM,100028963
+Vu Phi Buoi, 103668, Nam, 16/9/1999, 100022023,191 Le Thi Rieng Phuong 4 Quan 5 TP.HCM,100027998
+Vu Thi Dao, 115848, Nu, 30/7/1995, 100015722,131 Bui Thi Xuan Phuong 5 Quan 1 TP.HCM,100027112
