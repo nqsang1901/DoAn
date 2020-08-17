@@ -229,6 +229,8 @@ NODE* searchNode(const SLList L, char MaSV[9]) {
 	NODE* current = L.pHead;
 	while (current != NULL && strcmp(current->data.key.MaSV, MaSV) != 0)
 		current = current->pNext;
+	if (current == NULL)
+		return NULL;
 	return current;
 }
 NODE* updateNode(SLList& L) {  // return NULL if not found
@@ -430,14 +432,6 @@ bool Add2DynamicArr(DanhSachSV& aList, SINHVIEN sv)
 	aList.sv[pos] = item;
 	return true;
 }
-//bool ThemSV(DanhSachSV& aList, SINHVIEN X = { "20192000", "Nguyen Van Cu", true, { 1, 1, 1999 },
-//		"079099001002", "", "", "", "Cong nghe Thong tin", 0 }) {
-//	if (aList.n == aList.size) // must increase array size
-//		if (!MoRongDS(aList)) return false; //can not increase array size
-//
-//	aList.sv[aList.n++].key = X;
-//	return true;
-//}
 void Swap(SINHVIEN &a, SINHVIEN &b)
 {
 	SINHVIEN temp = a;
@@ -448,7 +442,7 @@ void SortListByMaSV(DanhSachSV& aList)
 {
 	for (int i = 0; i < aList.n-1; i++)
 	{
-		for (int j = i + 1; j < aList.n; i++)
+		for (int j = i + 1; j < aList.n; j++)
 		{
 			if (atoi(aList.sv[i].key.MaSV) > atoi(aList.sv[j].key.MaSV)) {
 				Swap(aList.sv[i].key, aList.sv[j].key);
@@ -490,6 +484,19 @@ int Array2SLList(DanhSachSV& aList,SLList& L )
 	}
 	return aList.n;
 }
+void SearchElementByMaSV(DanhSachSV& aList, char MaSV[9])
+{
+	int check = 0;
+	for (int i = 0; i < aList.n ; i++)
+	{
+		if (strcmp(aList.sv[i].key.MaSV, MaSV) == 0) {
+			Xuat(aList.sv[i].key);
+			check = 1;
+		}
+	}
+	if (check == 0)
+		cout << "Khong tim thay" << endl;
+}
 void Menu()
 {
 	DanhSachSV DArr;
@@ -502,6 +509,7 @@ void Menu()
 	else 
 		makeRandomList(L); // makeRandom Singly Linked List with N elements
 	while (true) {
+		cout << "------------MENU------------" << endl;
 		cout << "0. Quit" << endl
 			<< "1. Read List from File" << endl
 			<< "2. Save List to File" << endl
@@ -511,7 +519,9 @@ void Menu()
 			<< "6. Delete an Element " << endl
 			<< "7. Sort List" << endl
 			<< "8. Set List to Dynamic Array" << endl
-			<< "9. Set List to Linked List" << endl;
+			<< "9. Set List to Linked List" << endl
+			<< "10. Search Element" << endl;
+		cout << "----------------------------" << endl;
 		cout << endl << "Enter operation number: ";
 		int choice; cin >> choice;
 		switch (choice) {
@@ -566,11 +576,22 @@ void Menu()
 			else 
 				cout << "The Array is empty" << endl;
 			break;
+		case 10:
+			char MaSV[9];
+			cout << "Nhap ma sinh vien can tim kiem: "; cin >> MaSV;
+			if (ArrFlag == 0) {
+				SearchElementByMaSV(DArr, MaSV);
+			}
+			else {
+				NODE* X = searchNode(L, MaSV);
+				if (X != NULL) Xuat(X->data.key);
+				else cout << "Khong tim thay"<<endl;
+			}
+			break;
 		default: cout << "You need to enter a number between 0 & 9";
 			break;
 		}
 	}
-
 }
 void main()
 {
