@@ -1,4 +1,3 @@
-Vo Nguyen Bac, 100491, Nam, 3/10/1994, 100012382,23 Phan Van Tri Phuong 3 Quan 5 TP.HCM,100005447
-Vo Van Mai, 118467, Nam, 19/7/1992, 100024464,107 Phan Van Tri Phuong 2 Quan Go Vap TP.HCM,100009961
-Pham Thi Buoi, 104664, Nam, 18/9/1996, 100032757,39 Hoa Binh Phuong 6 Quan Go Vap TP.HCM,100027529
-Le Xuan Buoi, 121726, Nam, 18/8/2001, 100009894,105 Huynh Thuc Khang Phuong 3 Quan Go Vap TP.HCM,100017673
+Huynh Xuan Quit, 121313, Nu, 19/7/2004, 100004630,132 Tran Hung Dao Phuong 3 Quan 1 TP.HCM,100000262
+Tran Phi Buoi, 132478, Nu, 11/9/2004, 100009948,159 Huynh Thuc Khang Phuong 3 Quan 2 TP.HCM,100015431
+Tran Phi Bac, 100335, Nu, 21/8/1991, 100007596,187 Huynh Thuc Khang Phuong 6 Quan Tan Binh TP.HCM,100031541

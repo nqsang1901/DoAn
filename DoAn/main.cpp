@@ -207,7 +207,7 @@ void Doc_Ngay_Thang_Nam(ifstream& filein, Ngay& ngay)
 bool makeRandomList(DanhSachSV& aList, int num, int maxsize = MAX) {
 	if (num < MAX) aList.size = maxsize;
 	else aList.size = num + 100;
-	aList.sv = new Element[num];
+	aList.sv = new Element[MAX];
 	//aList.sv[1].key = new SINHVIEN[aList.size];
 	if (aList.sv == NULL) return false;
 	aList.n = num;
@@ -384,6 +384,23 @@ bool MoRongDS(DanhSachSV& aList, int Inc = 101) {
 	}
 	return true;
 }
+void Add2DynamicArr(DanhSachSV& aList, SINHVIEN sv)
+{
+	Element item = { sv,rand() % 100 };
+	if (aList.size == aList.n) {
+		for (int i = 101; i >= -9; i -= 10) {
+			if (i == -9)return;
+			Element* temp = (Element*)realloc(aList.sv, aList.size);
+			if (temp) {
+				aList.sv = temp;
+				aList.size += i;
+				break;
+			}	
+		}
+	}
+	aList.n++;
+	aList.sv[aList.n - 1] = item;
+}
 //bool ThemSV(DanhSachSV& aList, SINHVIEN X = { "20192000", "Nguyen Van Cu", true, { 1, 1, 1999 },
 //		"079099001002", "", "", "", "Cong nghe Thong tin", 0 }) {
 //	if (aList.n == aList.size) // must increase array size
@@ -392,7 +409,33 @@ bool MoRongDS(DanhSachSV& aList, int Inc = 101) {
 //	aList.sv[aList.n++].key = X;
 //	return true;
 //}
-
+void Swap(SINHVIEN &a, SINHVIEN &b)
+{
+	SINHVIEN temp = a;
+	a = b;
+	b = temp;
+}
+void SortListByMaSV(DanhSachSV& aList)
+{
+	for (int i = 0; i < aList.n-1; i++)
+	{
+		for (int j = i + 1; j < aList.n; i++)
+		{
+			if (atoi(aList.sv[i].key.MaSV) > atoi(aList.sv[j].key.MaSV)) {
+				Swap(aList.sv[i].key, aList.sv[j].key);
+			}
+		}
+	}
+}
+void SortListByMaSV(SLList& L)
+{
+	for (NODE* p1 = L.pHead; p1; p1 = p1->pNext) {
+		for (NODE* p2 = p1->pNext; p2; p2 = p2->pNext) {
+			if (atoi(p1->data.key.MaSV) > atoi(p2->data.key.MaSV))
+				Swap(p1->data.key, p2->data.key);
+		}
+	}
+}
 void Menu()
 {
 	DanhSachSV DArr;
@@ -401,7 +444,7 @@ void Menu()
 	cout << "Do you want to create dynamic arrays(0. yes, 1. no): ";
 	cin >> ArrFlag;
 	if (ArrFlag==0)
-		makeRandomList(DArr,3,3); // makeRandom Dynamic Array with N elements
+		makeRandomList(DArr,2,3); // makeRandom Dynamic Array with N elements
 	else 
 		makeRandomList(L); // makeRandom Singly Linked List with N elements
 	while (true) {
@@ -421,6 +464,7 @@ void Menu()
 		case 0: if (ArrFlag) deleteList(DArr);
 				else deleteList(L);
 			return;
+		case 1:
 		case 2:
 			if (ArrFlag == 0)
 				ghiThongTinDanhSachSinhVien(DArr);
@@ -432,9 +476,25 @@ void Menu()
 				Xuat(DArr, DArr.n + 1);
 			else printList(L);
 			break;
+		case 4:
+			break;
 		case 5: 
 			SINHVIEN sv;
-			addNode(L, sv);
+			TaoNgauNhien(sv);
+			if (ArrFlag == 0)
+				Add2DynamicArr(DArr, sv);
+			else addNode(L, sv);
+			break;
+		case 6:
+			break;
+		case 7:
+			if (ArrFlag == 0)
+				SortListByMaSV(DArr);
+			else SortListByMaSV(L);
+			break;
+		case 8:
+			break;
+		case 9:
 			break;
 		default: cout << "You need to enter a number between 0 & 9";
 		}
