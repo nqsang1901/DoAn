@@ -5,7 +5,7 @@
 #include<fstream>
 #include<string>
 using namespace std;
-#define MAX 12345 // so SV toi da du kien cua truong
+#define MAX 12345 // Số sinh viên tối đa dự kiến
 
 struct Ngay {
 	int ngay, thang, nam;
@@ -53,11 +53,13 @@ typedef struct {  // Singly Linked List Type
 	NODE* pTail;
 } SLList;
 
+//Hàm này cho phép tạo ngẫu nhiên thông tin của 1 sinh viên
 void TaoNgauNhien(SINHVIEN& X) {
-	
+	//Tạo ngẫu nhiên mã sinh viên
 	int Ma= (100000 + rand() % (999999 - 100000 + 1));
 	_itoa_s(Ma, X.MaSV, 10);
 
+	//Tạo ngẫu nhiên họ tên sinh viên
 	char Ho[11][8] = { "Nguyen", "Tran", "Le", "Pham", "Huynh", "Phan", "Vu","Vo", "Dang", "Bui" };
 	char Lot[8][8] = { "Van", "Thi", "Quang", "Xuan", "Phi" };
 	char Ten[18][8] = { "Xuan", "Ha", "Thu", "Dong", "Tay", "Nam", "Bac", "Trung", "Dai",
@@ -72,20 +74,25 @@ void TaoNgauNhien(SINHVIEN& X) {
 			strcat_s(X.TenSV, Ho[rand() % 9]);
 	}
 
+	//Tạo ngẫu nhiên giới tính sinh viên
 	X.GioiTinh[0] = 0;
 	strcat_s(X.TenSV, " "); strcat_s(X.TenSV, Ten[rand() % 17]);
 	char GT[3][4] = {"Nam", "Nu" };
 	strcat_s(X.GioiTinh,GT[rand() % 2]);
 
+	//Tạo ngẫu nhiên ngày sinh sinh viên
 	X.NgaySinh.ngay = rand() % 30 + 1;
 	X.NgaySinh.thang = rand() % 12 + 1;
 	X.NgaySinh.nam = (1990 + rand() % (2005 - 1990 + 1));
 
+	//Tạo ngẫu nhiên số CC sinh viên
 	int cc = (100000000 + rand() % (999999999 - 100000000 + 1));
 	_itoa_s(cc, X.SoCC, 10);
 
+	//Tạo ngẫu nhiên địa chỉ sinh viên
 	char So = _itoa_s(rand() % 200 + 2, X.DiaChi, 10);
-	char Duong[11][30] = { " Hoa Binh", " Tran Hung Dao", " Le Thi Rieng", " Pham Ngu Lao", " Huynh Thuc Khang", " Phan Van Tri",  " Bui Thi Xuan" };
+	char Duong[11][30] = { " Hoa Binh", " Tran Hung Dao", " Le Thi Rieng", " Pham Ngu Lao", " Huynh Thuc Khang", 
+		" Phan Van Tri",  " Bui Thi Xuan" };
 	char Phuong[11][10] = {"1","2","3","4","5","6"};
 	char Quan[10][15] = {"Tan Binh", "1","2","Go Vap","Binh Thanh","5"};
 	X.DiaChi[3] = So;
@@ -93,7 +100,30 @@ void TaoNgauNhien(SINHVIEN& X) {
 	strcat_s(X.DiaChi, Phuong[rand() % 6]); strcat_s(X.DiaChi, " Quan ");
 	strcat_s(X.DiaChi, Quan[rand() % 6]); 	strcat_s(X.DiaChi, " TP.HCM");
 
+	//Tạo ngẫu nhiên số điện thoại sinh viên
 	_itoa_s((100000000 + rand() % (999999999 - 100000000 + 1)), X.SoDT, 10);
+
+	//Tạo ngẫu nhiên ngành học sinh viên
+	/*char Nganh[11][30] = { " Hoa Binh", " Tran Hung Dao", " Le Thi Rieng", " Pham Ngu Lao", " Huynh Thuc Khang",
+		" Phan Van Tri",  " Bui Thi Xuan" };
+	strcat_s(X.NganhHoc, Nganh[rand() % 7]);*/
+
+	/*X.SoMonDaHoc = rand() % 4+1;
+	char MonHoc[11][30] = { "Toan", "Ngu Van", "Hoa hoc", "Sinh hoc", "Cong nghe", "Anh van",  "Dia ly" };
+	for (int i = 0; i <= X.SoMonDaHoc-1; i++)
+	{
+		strcat_s(X.Mon->TenMH, MonHoc[1]);
+		X.Mon->SoTietLT = rand() % 30+10;
+		X.Mon->SoTietTH = rand() % 33+12;
+		X.Mon->SoLanHoc = rand() % 4+1;
+		for (int j = 0; j <= X.Mon->SoLanHoc-1; j++)
+		{
+			X.Mon->DiemMH->Diem = rand() % 10;
+			X.Mon->DiemMH->NgayVaoDiem.ngay = rand() % 30 + 1;
+			X.Mon->DiemMH->NgayVaoDiem.thang = rand() % 12 + 1;
+			X.Mon->DiemMH->NgayVaoDiem.nam = 2018 + rand() % (2020 - 2018 + 1);
+		}
+	}*/
 }
 void NhapNgay(Ngay& N)
 {
@@ -131,7 +161,7 @@ void NhapSinhVien(SINHVIEN& X)
 	cout << "Nhap SDT: "; cin >> X.SoDT;
 	cout << "Nhap nganh hoc: "; cin >> X.NganhHoc;
 	cout << "Nhap so mon da hoc: "; cin >> X.SoMonDaHoc;
-	for (int i = 0; i < X.SoMonDaHoc; i++)
+	for (int i = 0; i <= X.SoMonDaHoc-1; i++)
 	{
 		NhapMonHoc(X.Mon[i]);
 	}
@@ -144,6 +174,18 @@ void Xuat(SINHVIEN& X) {
 	cout << "- " << "So CC: "<< X.SoCC << endl;
 	cout << "- " <<"Dia chi: " << X.DiaChi << endl;
 	cout << "- " << "SDT: "<< X.SoDT << endl;
+	/*cout << "- " << "Nganh hoc: " << X.NganhHoc << endl;*/
+	//cout << "- " << "So mon da hoc: " << endl;
+	//for (int i = 0; i <= X.SoMonDaHoc-1; i++)
+	//{
+	//	cout << "    "<<i+1<<". "<< X.Mon->TenMH << ": " << endl;
+	//	cout << "   + " <<"So lan da hoc: "<< X.Mon->SoLanHoc << endl;
+	//	for (int j = 0; j <= X.Mon->SoLanHoc-1; j++)
+	//	{
+	//		cout << "Diem: " << X.Mon->DiemMH->Diem<<endl;
+	//		cout << "Ngay vao diem: " << X.Mon->DiemMH->Diem<<endl;
+	//	}
+	//}
 	cout << endl;
 }
 void ghiThongTin1SinhVien(ofstream& fileout, SINHVIEN sv)
@@ -186,24 +228,6 @@ void Doc_Ngay_Thang_Nam(ifstream& filein, Ngay& ngay)
 	filein.seekg(1, 1); // dịch sang phải 1 byte để bỏ qua kí tự '/'
 	filein >> ngay.nam;
 }
-//void ghiThongTin1SinhVien(ifstream& filein, SINHVIEN& sv)
-//{
-//	// đọc họ tên sinh viên
-//	cin.getline(filein, sv.TenSV, ','); // đọc đến dấu ',' thì dừng
-//	filein.seekg(1, 1); // tại vị trí hiện tại dịch sang phải 1 byte để bỏ khoảng trắng ' '
-//	// đọc mã sinh viên	
-//	getline(filein, sv.masv, ','); // đọc đến dấu ',' thì dừng
-//	filein.seekg(1, 1); // tại vị trí hiện tại dịch sang phải 1 byte để bỏ khoảng trắng ' '
-//	// đọc thông tin ngày tháng năm sinh
-//	Doc_Ngay_Thang_Nam(filein, sv.ngaysinh);
-//	filein.seekg(2, 1); // tại vị trí hiện tại dịch sang phải 2 byte để bỏ dấu phẩy và khoảng trắng ' '
-//	// đọc điểm trung bình
-//	filein >> sv.dtb;
-//
-//	// tạo biến tạm để đọc cái kí tự xuống dòng ở cuối dòng
-//	string temp;
-//	getline(filein, temp);
-//}
 bool makeRandomList(DanhSachSV& aList) {
 	cout << "Enter number of elements: ";
 	int num;  cin >> num;
@@ -236,16 +260,54 @@ NODE* searchNode(const SLList L, char MaSV[9]) {
 NODE* updateNode(SLList& L) {  // return NULL if not found
 	cout << "Enter MaSV of SV: ";
 	char MaSV[9]; cin >> MaSV;
-	NODE* p = searchNode(L, MaSV);
-	if (p == NULL) {
-		cout << "Not found!" << endl;
-		return NULL;
+	int dem = 0;
+
+	NODE* p = L.pHead;
+	for (p; p != NULL; p = p->pNext)
+	{
+		if (strcmp(p->data.key.MaSV, MaSV) == 0) {
+			cout << "Enter the new SV of node: " << endl;
+			cout << "Nhap ten SV: "; cin >> p->data.key.TenSV;
+			cout << "Nhap gioi tinh: (0.Nam, 1.Nu) "; cin >> p->data.key.GioiTinh;
+			cout << "Nhap ngay sinh: " << endl; NhapNgay(p->data.key.NgaySinh);
+			cout << "Nhap so CC: "; cin >> p->data.key.SoCC;
+			cout << "Nhap dia chi: "; cin >> p->data.key.DiaChi;
+			cout << "Nhap Email: "; cin >> p->data.key.Email;
+			cout << "Nhap SDT: "; cin >> p->data.key.SoDT;
+			cout << "Nhap nganh hoc: "; cin >> p->data.key.NganhHoc;
+			dem++;
+			break;
+		}
 	}
-	cout << "Enter the new SV of node: ";
-	//cin >> p->data.key;
-	cout << "Enter the new <sth_more> of node: ";
-	cin >> p->data.xyz;
+	if (dem == 0)
+		cout << "Khong tim thay SV" << endl;
+	cout << "------------------------------------" << endl;
 	return p;
+}
+
+void updateSV(DanhSachSV& aList)
+{
+	int dem = 0;
+	SINHVIEN sv;
+	cout << "Enter MaSV of SV: ";
+	char MaSV[9]; cin >> MaSV;
+	for (int i = 0; i < aList.n; i++)
+	{
+		if (strcmp(aList.sv[i].key.MaSV, MaSV) == 0) {  //so sánh MSSV với chuỗi vừa nhập
+			cout << "Enter the new SV : " << endl;						//Nhập SV
+			cout << "Nhap ten SV: "; cin >> aList.sv[i].key.TenSV;
+			cout << "Nhap gioi tinh: (0.Nam, 1.Nu) "; cin >> aList.sv[i].key.GioiTinh;
+			cout << "Nhap ngay sinh: " << endl; NhapNgay(aList.sv[i].key.NgaySinh);
+			cout << "Nhap so CC: "; cin >> aList.sv[i].key.SoCC;
+			cout << "Nhap dia chi: "; cin >> aList.sv[i].key.DiaChi;
+			cout << "Nhap Email: "; cin >> aList.sv[i].key.Email;
+			cout << "Nhap SDT: "; cin >> aList.sv[i].key.SoDT;
+			cout << "Nhap nganh hoc: "; cin >> aList.sv[i].key.NganhHoc;
+			dem++;									//nếu tìm thấy sv thì dem++
+		}
+	}
+	if (dem == 0)
+		cout << "Khong tim thay SV" << endl;
 }
 
 NODE* prependNode(SLList& L, Element X) { //return newNode
@@ -484,18 +546,123 @@ int Array2SLList(DanhSachSV& aList,SLList& L )
 	}
 	return aList.n;
 }
-void SearchElementByMaSV(DanhSachSV& aList, char MaSV[9])
+
+void TimSVtheoMSSV(SLList L)
 {
-	int check = 0;
-	for (int i = 0; i < aList.n ; i++)
+	int dem = 0;
+	cout << "Nhap MSSV can tim: ";
+	char k[30];
+	cin >> k;
+
+	NODE* p = L.pHead;
+	cout << "------------------------------------" << endl;
+	for (p; p != NULL; p = p->pNext)
 	{
-		if (strcmp(aList.sv[i].key.MaSV, MaSV) == 0) {
-			Xuat(aList.sv[i].key);
-			check = 1;
+		if (strcmp(p->data.key.MaSV, k) == 0) {//so sánh MSSV với chuỗi vừa nhập
+			Xuat(p->data.key);					 //Xuất sv 
+			dem++;								//nếu tìm thấy sv thì dem++
+			break;
 		}
 	}
-	if (check == 0)
-		cout << "Khong tim thay" << endl;
+	if (dem == 0)
+		cout << " Khong tim thay SV" << endl;
+
+	cout << endl << "........................." << endl;
+}
+
+void TimSVtheoMSSV(DanhSachSV aList)
+{
+	cout << "Nhap MSSV can tim: ";
+	char k[30];
+	cin >> k;
+	int dem = 0;
+	for (int i = 0; i < aList.n; i++)
+	{
+		if (strcmp(aList.sv[i].key.MaSV, k) == 0) {  //so sánh MSSV với chuỗi vừa nhập
+			Xuat(aList.sv[i].key);				  //Xuất sv 
+			dem++;									//nếu tìm thấy sv thì dem++
+		}
+	}
+	if (dem == 0)
+		cout << "Khong tim thay SV" << endl;
+}
+
+void TimSVtheoGioiTinh(DanhSachSV aList)
+{
+	cout << "Nhap Gioi tinh: ";
+	char k[30];
+	cin >> k;
+	int dem = 0;
+	for (int i = 0; i < aList.n; i++)
+	{
+		if (strcmp(aList.sv[i].key.GioiTinh, k) == 0) {  //so sánh Gioi tính với chuỗi vừa nhập
+			Xuat(aList.sv[i].key);				  //Xuất sv 
+			dem++;									//nếu tìm thấy sv thì dem++
+		}
+	}
+	if (dem == 0)
+		cout << "Khong tim thay SV" << endl;
+}
+
+
+void TimSVtheoGioiTinh(SLList L)
+{
+	int dem = 0;
+	cout << "Nhap Gioi tinh can tim: ";
+	char k[30];
+	cin >> k;
+	NODE* p = L.pHead;
+	cout << "------------------------------------" << endl;
+	for (p; p != NULL; p = p->pNext)
+	{
+		if (strcmp(p->data.key.GioiTinh, k) == 0) { //so sánh Giới tính với chuỗi vừa nhập
+			Xuat(p->data.key);
+			dem++;
+		}
+	}
+	if (dem == 0)
+		cout << " Khong tim thay SV" << endl;
+
+	cout << endl << "........................." << endl;
+}
+void TimSVtheoNam(DanhSachSV aList)
+{
+	cout << "Nhap Nam sinh: ";
+	int k;
+	cin >> k;
+	int dem = 0;
+	for (int i = 0; i < aList.n; i++)
+	{
+		if (aList.sv[i].key.NgaySinh.nam == k) {  //so sánh năm sinh với chuỗi vừa nhập
+			Xuat(aList.sv[i].key);
+			dem++;
+		}
+	}
+	if (dem == 0)
+		cout << "Khong tim thay SV" << endl;
+}
+
+void TimSVtheoNam(SLList L)
+{
+	int dem = 0;
+	cout << "Nhap Nam sinh can tim: ";
+	int k;
+	cin >> k;
+
+	NODE* p = L.pHead;
+	cout << "------------------------------------" << endl;
+	for (p; p != NULL; p = p->pNext)
+	{
+		if (p->data.key.NgaySinh.nam == k) {//so sánh Năm sinh với chuỗi vừa nhập
+			Xuat(p->data.key);
+			dem++;
+			break;
+		}
+	}
+	if (dem == 0)
+		cout << " Khong tim thay SV" << endl;
+
+	cout << endl << "........................." << endl;
 }
 void Menu()
 {
@@ -520,7 +687,9 @@ void Menu()
 			<< "7. Sort List" << endl
 			<< "8. Set List to Dynamic Array" << endl
 			<< "9. Set List to Linked List" << endl
-			<< "10. Search Element" << endl;
+			<< "10. Search by MSSV" << endl
+			<< "11. Search by Gender" << endl
+			<< "12. Search by Year of birth" << endl;
 		cout << "----------------------------" << endl;
 		cout << endl << "Enter operation number: ";
 		int choice; cin >> choice;
@@ -541,6 +710,10 @@ void Menu()
 			else printList(L);
 			break;
 		case 4:
+			if (ArrFlag == 0)
+				updateSV(DArr);
+			else
+				updateNode(L);
 			break;
 		case 5: 
 			SINHVIEN sv;
@@ -577,16 +750,22 @@ void Menu()
 				cout << "The Array is empty" << endl;
 			break;
 		case 10:
-			char MaSV[9];
-			cout << "Nhap ma sinh vien can tim kiem: "; cin >> MaSV;
-			if (ArrFlag == 0) {
-				SearchElementByMaSV(DArr, MaSV);
-			}
-			else {
-				NODE* X = searchNode(L, MaSV);
-				if (X != NULL) Xuat(X->data.key);
-				else cout << "Khong tim thay"<<endl;
-			}
+			if (ArrFlag == 1)
+				TimSVtheoMSSV(L);
+			else
+				TimSVtheoMSSV(DArr);
+			break;
+		case 11:
+			if (ArrFlag == 0)
+				TimSVtheoGioiTinh(DArr);
+			else
+				TimSVtheoGioiTinh(L);
+			break;
+		case 12:
+			if (ArrFlag == 0)
+				TimSVtheoNam(DArr);
+			else
+				TimSVtheoNam(L);
 			break;
 		default: cout << "You need to enter a number between 0 & 9";
 			break;
